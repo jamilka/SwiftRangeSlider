@@ -15,7 +15,7 @@ class RangeSliderTrack: CALayer {
   override func draw(in ctx: CGContext) {
     if let slider = rangeSlider {
       // Clip
-      let cornerRadius = bounds.height * slider.curvaceousness / 2.0
+      let cornerRadius = bounds.height * 0.0 / 2.0
       let path = UIBezierPath(roundedRect: bounds, cornerRadius: cornerRadius)
       ctx.addPath(path.cgPath)
       
