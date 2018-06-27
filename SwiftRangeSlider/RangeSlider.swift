@@ -334,16 +334,60 @@ import QuartzCore
     lowerLabel.fontSize = labelFontSize
     upperLabel.fontSize = labelFontSize
     
-    lowerLabel.string = getLabelText(forValue: lowerValue)
-    upperLabel.string = getLabelText(forValue: upperValue)
+    //lowerLabel.string = getLabelText(forValue: lowerValue)
+    lowerLabel.string = formatter(seconds: Int(lowerValue))
+    //upperLabel.string = getLabelText(forValue: upperValue)
+    upperLabel.string = formatter(seconds: Int(upperValue))
     
     lowerLabel.foregroundColor = labelColor.cgColor
     upperLabel.foregroundColor = labelColor.cgColor
     
-    lowerLabelTextSize = (lowerLabel.string as! NSString).size(attributes: [NSFontAttributeName : UIFont.systemFont(ofSize: labelFontSize)])
-    upperLabelTextSize = (upperLabel.string as! NSString).size(attributes: [NSFontAttributeName : UIFont.systemFont(ofSize: labelFontSize)])
+    lowerLabelTextSize = (lowerLabel.string as! NSString).size(withAttributes: [NSAttributedStringKey.font : UIFont.systemFont(ofSize: labelFontSize)])
+    upperLabelTextSize = (upperLabel.string as! NSString).size(withAttributes: [NSAttributedStringKey.font : UIFont.systemFont(ofSize: labelFontSize)])
   }
-  
+    
+    open func formatter(seconds: Int) -> String {
+        let hours = seconds/3600
+        let minutes = (seconds % 3600) / 60
+        let seconds = (seconds % 3600) % 60
+        var returnString = ""
+        switch hours {
+        case 1..<24:
+            returnString = String(hours) + ":"
+        default:
+            print("never reached")
+        }
+        
+        switch minutes{
+        case 0:
+            returnString += "00:"
+        case 1..<10:
+            returnString += "0" + String(minutes) + ":"
+        case 10..<60:
+            returnString = String(minutes) + ":"
+        default:
+            print("never reached")
+        }
+        
+        switch seconds{
+        case 0:
+            returnString += "00"
+        case 1..<10:
+            returnString += "0" + String(seconds)
+        case 10..<60:
+            returnString += String(seconds)
+        default:
+            print("never reached")
+        }
+        
+        return returnString
+    }
+    
+    open override func layoutSubviews() {
+        super.layoutSubviews()
+        updateLayerFramesAndPositions()
+    }
+    
   ///Updates the labels positions above the knobs.
   open func updateLabelPositions() {
     let minDistanceBetweenLabels: CGFloat = 8.0
